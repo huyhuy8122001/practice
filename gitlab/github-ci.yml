@@ -1,0 +1,22 @@
+#image: centos:centos7
+stages:
+  - deploy to test
+
+deploy to test:
+  stage: deploy to test
+  tags:
+    - cd
+  image: centos:latest
+  script:
+    - echo "running12"
+    - yum update -y
+    - yum install -y epel-release
+    - yum install ansible -y
+    - yum install python3-pip openssh-clients -y
+    - pip3 install paramiko
+    - cp -rf * /etc/ansible/
+    - mkdir -p ~/.ssh/
+    - ssh-keyscan 10.215.26.170 >> ~/.ssh/known_hosts
+    - cd /etc/ansible/
+    - ansible-playbook showip.yml -i hosts
+
